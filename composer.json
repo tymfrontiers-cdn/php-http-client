@@ -1,0 +1,33 @@
+{
+  "name": "tymfrontiers-cdn/php-http-client",
+  "description": "PHP HTTP request client",
+  "keywords": ["php", "http","client","tym","frontiers"],
+  "homepage": "https://github.com/tymfrontiers-cdn/php-http-client",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+      {
+          "name": "Sir Louis",
+          "email": "me@sirlouis.io",
+          "homepage": "https://sirlouis.io",
+          "role": "developer"
+      },
+      {
+          "name": "Tym Frontiers Ltd",
+          "email": "git@tymfrontiers.com",
+          "homepage": "https://tymfrontiers.com",
+          "role": "developer"
+      }
+  ],
+  "require": {
+    "php" : ">=5.3",
+    "tymfrontiers-cdn/php-validator" : ">=0.1@stable",
+    "tymfrontiers-cdn/php-http-header" : ">=0.1@stable"
+  },
+  "require-dev": {},
+  "autoload": {
+      "psr-4": {
+          "TymFrontiers\\HTTP\\": "src/"
+      }
+  }
+}
