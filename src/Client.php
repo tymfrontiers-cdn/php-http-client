@@ -12,6 +12,8 @@ class Client{
   const HEAD = 'HEAD';
   const TRACE = 'TRACE';
 
+  const VERSION = "v1.x";
+
   protected $_data_type = "text";
   protected $_raw_param = false;
   protected $_method = "GET";
