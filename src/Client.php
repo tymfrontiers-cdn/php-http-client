@@ -126,7 +126,7 @@ class Client{
       "Accept" => !\array_key_exists($this->_method, $this->_data_types)
         ? $this->_data_types['text']
         : $this->_data_types[$this->_method],
-      "User-Agent" => "[{$_SERVER['HTTP_HOST']}]: Tym Frontiers HTTP Client/".self::VERSION
+      "User-Agent" => "[". (\defined('PRJ_DOMAIN') ? PRJ_DOMAIN : "") ."]: Tym Frontiers HTTP Client/".self::VERSION
     ];
     if( !empty($header) ){
       foreach($header as $key=>$value){
@@ -139,7 +139,7 @@ class Client{
     }
 
     if( !\function_exists('curl_init') ){
-      $this->errors['Self'][] = [
+      $this->errors['self'][] = [
       2, // viewer rank
       256, // error type: PHP user error
       "This request requires curl but was not found on this server.", // error message
@@ -178,7 +178,7 @@ class Client{
     $this->_header = \substr($response, 0, $this->_header_size);
     $this->_body = \substr($response, $this->_header_size);
     if( \curl_errno($ch) ){
-      $this->errors['Self'][] = [
+      $this->errors['self'][] = [
         2, // viewer rank
         256, // error type
         \strip_tags( \curl_error($ch) ), // error message
@@ -187,7 +187,7 @@ class Client{
       ];
       return false;
     }if( $this->_status_code !== 200 ){
-      $this->errors['Self'][] = [
+      $this->errors['self'][] = [
         2, // viewer rank
         256, // error type
         \substr( \strip_tags( $response ), 0, \strpos(\strip_tags( $response ), PHP_EOL)), // error message
