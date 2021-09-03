@@ -49,41 +49,41 @@ class Client{
       }
       switch($meth){
         case self::POST:
-          $this->POST($url,$params,$header);
+          $this->POST($url,$header,$params);
           break;
         case self::PUT:
-          $this->PUT($url,$params,$header);
+          $this->PUT($url,$header,$params);
           break;
         case self::PATCH:
-          $this->PATCH($url,$params,$header);
+          $this->PATCH($url,$header,$params);
           break;
         case self::DELETE:
-          $this->DELETE($url,$params,$header);
+          $this->DELETE($url,$header,$params);
           break;
         case self::HEAD:
-          $this->HEAD($url,$params,$header);
+          $this->HEAD($url,$header,$params);
           break;
         case self::TRACE:
-          $this->TRACE($url,$params,$header);
+          $this->TRACE($url,$header,$params);
           break;
         case self::OPTIONS:
-          $this->OPTIONS($url,$params,$header);
+          $this->OPTIONS($url,$header,$params);
           break;
         default:
-          $this->GET($url,$params,$header);
+          $this->GET($url, $header, $params);
           break;
       }
     }
   }
-  public function GET(string $url, array $params=[], array $header){
+  public function GET(string $url, array $header, array $params=[]){
     $this->_method = self::GET;
     if( !$this->_url = (new Validator())->url($url,["url","url"]) ){
       throw new \Exception("Invalid resource URL parsed.", 1);
     }
     return $this->_fetch($params,$header);
    }
-  public function PUT(string $url, array $params=[], array $header){ return false; }
-  public function POST(string $url, array $params=[], array $header){
+  public function PUT(string $url, array $header, array $params=[]){ return false; }
+  public function POST(string $url, array $header, array $params=[]){
     $this->_method = self::POST;
     if( !$this->_url = (new Validator())->url($url,["url","url"]) ){
       throw new \Exception("Invalid resource URL parsed.", 1);
@@ -91,10 +91,10 @@ class Client{
     return $this->_fetch($params,$header);
   }
 
-  public function PATCH(string $url, array $params=[], array $header){ return false; }
-  public function DELETE(string $url, array $params=[], array $header){ return false; }
-  public function HEAD(string $url, array $params=[], array $header){ return false; }
-  public function TRACE(string $url, array $params=[], array $header){ return false; }
+  public function PATCH(string $url, array $header, array $params=[]){ return false; }
+  public function DELETE(string $url, array $header, array $params=[]){ return false; }
+  public function HEAD(string $url, array $header, array $params=[]){ return false; }
+  public function TRACE(string $url, array $header, array $params=[]){ return false; }
 
   public function status(){ return $this->_status; }
   public function statusCode(){ return $this->_status_code; }
@@ -117,7 +117,7 @@ class Client{
     }
     return null;
   }
-  private final function _fetch(array $params=[], array $header=[]){
+  private function _fetch(array $params=[], array $header=[]){
     $response = false;
     $opts = [ "method" => "GET", "type" => "json","json_params"=>false];
     if( !empty($opt['method']) ) $opt['method'] = \strtoupper($opt['method']);
@@ -135,7 +135,13 @@ class Client{
     }
     $header = [];
     foreach($headers as $key=>$val){
-      $header[] = \is_int($key) ? $val : "{$key}: {$val}";
+      if (\is_int($key)) {
+        $header[] = $val;
+      } else if (\is_array($val)) {
+
+      } else {
+        $header[] = "{$key}: {$val}";
+      }
     }
 
     if( !\function_exists('curl_init') ){
